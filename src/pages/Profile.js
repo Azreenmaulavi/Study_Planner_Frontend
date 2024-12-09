@@ -24,10 +24,17 @@ function Profile() {
           return;
         }
 
-        const response = await api.get(`/auth/user/getUserProfile/${userId}`); // Fetch user profile using userId
-        setUserData(response.data.data); // Set the user data from the API
-        setImageURL(response.data.data.profilePicture); // Set the profile picture URL
-        form.setFieldsValue(response.data); // Set the form fields
+        const response = await api.get(`/auth/user/getUserProfile/${userId}`); 
+        const user = response.data.data; // Extract the user data from the API response
+        console.log("User Profile", user);
+
+        // Fix profile picture URL to use forward slashes
+        const profilePicURL = user.profilePicture.replace(/\\/g, "/");
+        console.log("Profile Pic", profilePicURL);
+  
+        setUserData(user); // Set the user data
+        setImageURL(profilePicURL); // Set the corrected profile picture URL
+        form.setFieldsValue({ ...user, profilePicture: [] }); // Initialize form fields, make sure profilePicture is an empty array initially
       } catch (error) {
         message.error("Failed to fetch user data");
       }
@@ -58,10 +65,15 @@ function Profile() {
 
   // Handle the profile picture change
   const handleProfilePictureChange = (info) => {
-    if (info.file.status === "done") {
-      getBase64(info.file.originFileObj, (imageUrl) => {
-        setImageURL(imageUrl); // Update the profile image URL
-      });
+    // Check if info and info.file are defined
+    if (info && info.file) {
+      if (info.file.status === "done") {
+        getBase64(info.file.originFileObj, (imageUrl) => {
+          setImageURL(imageUrl); // Update the profile image URL
+        });
+      } else if (info.file.status === "error") {
+        message.error("Failed to upload image.");
+      }
     }
   };
 
@@ -71,10 +83,12 @@ function Profile() {
       // Create FormData to send the image and other fields
       const formData = new FormData();
       formData.append("email", values.email);
-      formData.append("profilePicture", values.profilePicture[0]?.originFileObj);
+      if (values.profilePicture && values.profilePicture[0]) {
+        formData.append("profilePicture", values.profilePicture[0].originFileObj);
+      }
 
       // Send the data to the backend to update the profile
-      await api.post(`/auth/user/updateProfile/${userId}`, formData, {
+      await api.post(`/auth/user/uploadProfilePicture/${userId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data", // Specify the content type for file upload
         },
@@ -93,7 +107,7 @@ function Profile() {
   };
 
   const handleCancel = () => {
-    form.setFieldsValue(userData); // Reset the form values
+    form.setFieldsValue({ ...userData, profilePicture: [] }); // Reset the form values and empty the file list
     setImageURL(userData.profilePicture); // Reset the profile picture
     setEditing(false); // Exit edit mode
   };
@@ -113,7 +127,8 @@ function Profile() {
               <Avatar
                 size={74}
                 shape="square"
-                src={imageURL}
+                src={imageURL ? `http://localhost:5000/${imageURL}` : 'http://localhost:5000/uploads/1733669835967.jpg'}
+
                 style={{ marginBottom: "16px" }}
               />
               <div className="avatar-info">
@@ -158,7 +173,9 @@ function Profile() {
               name="profilePicture"
               label="Profile Picture"
               valuePropName="fileList"
-              getValueFromEvent={(e) => e?.fileList || []} // Fix here
+              getValueFromEvent={(e) => {
+                return e && e.fileList ? e.fileList : []; // Ensure it returns an empty array if undefined
+              }}
               beforeUpload={beforeUpload}
               onChange={handleProfilePictureChange}
             >
