@@ -19,11 +19,11 @@ const NavbarComponent = () => {
       </div>
       <div className={`menu-1 ${isMenuOpen ? 'open' : ''}`}>
         <a href="/">Home</a>
-        <a href="#about">About</a>
-        <a href="#feature">Feature</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#review">Review</a>
-        <a href="#contact">Contact</a>
+        <a href="/about">About</a>
+        <a href="/feature">Feature</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/faq">FAQ</a>
+        <a href="/contact">Contact</a>
       </div>
       <Link to="/login">
         <button className="free-trial-btn">Start Now</button>
