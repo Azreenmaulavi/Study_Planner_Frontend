@@ -23,6 +23,9 @@ import Login from "./components/landingPage/Login"
 import Register from "./components/landingPage/Register"
 import ForgotPassword from "./components/landingPage/ForgotPassword"
 import TaskList from "./pages/TaskList";
+import FAQ from "./components/landingPage/FAQ";
+import ContactUs from "./components/landingPage/ContactUs";
+
 
 
 
@@ -47,6 +50,8 @@ function App() {
           <Route path="/login" element={<Layout><Login /></Layout>} />
           <Route path="/register" element={<Layout><Register /></Layout>} />
           <Route path="/forgot-pass" element={<Layout><ForgotPassword /></Layout>} />
+          <Route path="/faq" element={<Layout><FAQ /></Layout>} />
+          <Route path="/contact" element={<Layout><ContactUs /></Layout>} />
          
               
                 

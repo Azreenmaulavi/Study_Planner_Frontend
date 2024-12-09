@@ -78,6 +78,7 @@
   color: #000;
 }
 
+
 /* HERO Section Styles */
 .hero-container {
   display: flex;
@@ -290,10 +291,22 @@
     position: absolute;
     top: 60px;
     left: 0;
-    background: linear-gradient(7deg, #6a11cb, #4084f8);
+    /* background: linear-gradient(7deg, #6a11cb, #4084f8); */
+    background: white;
     width: 100%;
     padding: 20px;
     z-index: 1000;
+  }
+  .menu-1 a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    font-size: 16px;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .menu-1 a:hover {
+    color: #ffd700;
   }
 
   .menu-1.open {
@@ -321,6 +334,7 @@
   .hero-image {
     margin-top: 20px;
     width: 80%;
+    margin-top: 90px;
   }
 
   .hero-content {
@@ -348,6 +362,7 @@
   }
 }
 
+/* Navbar and Hero responsive */
 @media (max-width: 480px) {
   .navbar {
     padding: 10px 15px;
@@ -364,6 +379,7 @@
     height: 100px; /* Further reduce height for very small screens */
     background-size: contain; /* Maintain good proportions */
     background-position: center bottom; /* Adjust alignment */
+    padding-top: 70px;
   }
   
   .hero-content h1 {
@@ -603,5 +619,58 @@ h2 {
 
   input, .custom-btn {
     font-size: 14px;
+  }
+}
+
+
+/* Contact Us */
+.contact-us-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contact-us-title {
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.contact-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px; /* Increased max-width for wider form */
+}
+
+.submit-button {
+  width: 100%;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .contact-us-container {
+    padding: 20px;
+  }
+
+  .contact-info {
+    margin-top: 20px;
   }
 }
