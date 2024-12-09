@@ -623,7 +623,7 @@ useEffect(() => {
         const response = await api.get(`${userId}/weeklyProgress/${currentWeek}`);
         setWeeklyProgress(response.data.progress);
       } catch (error) {
-        message.error("Failed to fetch weekly progress.");
+        setWeeklyProgress(0);
       }
     };
     fetchWeeklyProgress();
@@ -638,7 +638,7 @@ useEffect(() => {
       const response = await api.get(`${userId}/upcoming/tasks`); // Endpoint for fetching tasks
       setTasks(response.data.tasks); // Update state with fetched tasks
     } catch (error) {
-      message.error("Failed to fetch upcoming tasks.");
+      setTasks([]);
     } finally {
       setLoading(false);
     }
