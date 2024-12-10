@@ -38,8 +38,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts build",
+    "start": "GENERATE_SOURCEMAP=false react-scripts --openssl-legacy-provider start",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test"
   },
   "eslintConfig": {
@@ -65,6 +65,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",
     "@babel/preset-env": "^7.22.0",
     "@babel/preset-react": "^7.25.9",
-    "babel-loader": "^9.2.1"
+    "babel-loader": "^9.2.1",
+    "source-map-loader": "^5.0.0"
   }
 }
