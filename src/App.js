@@ -25,11 +25,7 @@ import ForgotPassword from "./components/landingPage/ForgotPassword"
 import TaskList from "./pages/TaskList";
 import FAQ from "./components/landingPage/FAQ";
 import ContactUs from "./components/landingPage/ContactUs";
-
-
-
-
-
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   useEffect(() => {
@@ -64,7 +60,7 @@ function App() {
                   <Route path="/profile" element={<Main><Profile /></Main>} />
                   <Route path="/notifications" element={<Main><UserNotifications /></Main>} />
                   {/* Redirect all unknown routes to /dashboard */}
-                  <Route path="*" element={<Navigate to="/dashboard" />} />
+                  <Route path="*" element={<NotFoundPage/>} />
                 
              
             
