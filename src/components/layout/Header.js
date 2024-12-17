@@ -51,7 +51,7 @@
   //   </svg>,
   // ];
 
-  function Header({subName,onPress  }) {
+  function Header({subName,onPress,userProfilePic  }) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [notificationCount, setNotificationCount] = useState(0);
       
@@ -95,7 +95,7 @@
           <Col span={24} md={18} className="header-control">
           <Avatar
             size="large"
-            src="https://www.example.com/your-profile-pic.jpg" // Replace with dynamic URL or local path
+            src={userProfilePic}
             style={{ marginLeft: "16px", cursor: "pointer" }}
           />
           <Badge count={notificationCount }> {/* Dynamically show count */}

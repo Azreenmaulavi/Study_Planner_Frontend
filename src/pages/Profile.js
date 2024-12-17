@@ -28,12 +28,12 @@ function Profile() {
         const user = response.data.data; // Extract the user data from the API response
         console.log("User Profile", user);
 
-        // Fix profile picture URL to use forward slashes
-        const profilePicURL = user.profilePicture.replace(/\\/g, "/");
+        // Set the profile picture URL (Cloudinary URL)
+        const profilePicURL = user.profilePicture;  // Cloudinary URL directly from response
         console.log("Profile Pic", profilePicURL);
   
         setUserData(user); // Set the user data
-        setImageURL(profilePicURL); // Set the corrected profile picture URL
+        setImageURL(profilePicURL); // Set the profile picture URL
         form.setFieldsValue({ ...user, profilePicture: [] }); // Initialize form fields, make sure profilePicture is an empty array initially
       } catch (error) {
         message.error("Failed to fetch user data");
@@ -63,19 +63,22 @@ function Profile() {
     return isJpgOrPng && isLt2M;
   };
 
-  // Handle the profile picture change
-  const handleProfilePictureChange = (info) => {
-    // Check if info and info.file are defined
-    if (info && info.file) {
-      if (info.file.status === "done") {
-        getBase64(info.file.originFileObj, (imageUrl) => {
-          setImageURL(imageUrl); // Update the profile image URL
-        });
-      } else if (info.file.status === "error") {
-        message.error("Failed to upload image.");
-      }
-    }
-  };
+// Handle the profile picture change
+const handleProfilePictureChange = (event) => {
+  const file = event.target.files[0]; // assuming the file is being passed here
+
+  if (!file) {
+    console.error("No file selected");
+    return;
+  }
+
+  // No need to call an API here, just update the state if you want to preview the image
+  getBase64(file, (base64Image) => {
+    setImageURL(base64Image); // Set the image URL to the Base64 image
+  });
+};
+
+
 
   // Save changes to the profile
   const handleSave = async (values) => {
@@ -86,6 +89,10 @@ function Profile() {
       if (values.profilePicture && values.profilePicture[0]) {
         formData.append("profilePicture", values.profilePicture[0].originFileObj);
       }
+       // Log the form data (for debugging purposes)
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}:`, pair[1]);
+    }
 
       // Send the data to the backend to update the profile
       await api.post(`/auth/user/uploadProfilePicture/${userId}`, formData, {
@@ -97,7 +104,11 @@ function Profile() {
       message.success("Profile updated successfully");
       setEditing(false); // Turn off edit mode
     } catch (error) {
-      message.error("Failed to update profile");
+      if (error.response && error.response.data.message) {
+        message.error(error.response.data.message); // Show the backend error
+      } else {
+        message.error("Failed to update profile");
+      }
     }
   };
 
@@ -124,11 +135,10 @@ function Profile() {
         title={
           <Row justify="space-between" align="middle" gutter={[24, 0]}>
             <Col span={24} md={12} className="col-info">
-              <Avatar
+            <Avatar
                 size={74}
                 shape="square"
-                src={imageURL ? `http://localhost:5000/${imageURL}` : 'http://localhost:5000/uploads/1733669835967.jpg'}
-
+                src={imageURL || 'https://www.example.com/default-avatar.jpg'} // Use Cloudinary URL or fallback image
                 style={{ marginBottom: "16px" }}
               />
               <div className="avatar-info">
@@ -173,13 +183,11 @@ function Profile() {
               name="profilePicture"
               label="Profile Picture"
               valuePropName="fileList"
-              getValueFromEvent={(e) => {
-                return e && e.fileList ? e.fileList : []; // Ensure it returns an empty array if undefined
-              }}
+              getValueFromEvent={(e) => e && e.fileList ? e.fileList : []}
               beforeUpload={beforeUpload}
               onChange={handleProfilePictureChange}
             >
-              <Upload
+            <Upload
                 name="profilePicture"
                 listType="picture-card"
                 maxCount={1}
